@@ -1,0 +1,104 @@
+CREATE TABLE pedidos (
+	id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+    fecha DATE,
+    producto VARCHAR (45)
+);
+ALTER TABLE pedidos
+    ADD COLUMN id_transporte INT,
+    ADD COLUMN id_cliente INT;
+    
+CREATE TABLE transporte (
+	id_transporte INT PRIMARY KEY AUTO_INCREMENT, 
+	nombre VARCHAR(45),
+    localidad VARCHAR(45)
+
+);
+
+CREATE TABLE inventario (
+	id_medicamento INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(45),
+    droga VARCHAR(45),
+    precio DECIMAL(10,2)
+
+);
+/*uso change para renombrar una columna con atributos especiales como PK y Auto_increment*/
+ALTER TABLE inventario 
+    CHANGE id_medicamento id_producto INT AUTO_INCREMENT;
+    
+CREATE TABLE prod_pedido (
+	id_prod_pedido INT PRIMARY KEY, 
+    cantidad INT
+
+
+);
+
+CREATE TABLE afiliados (
+	id_afil INT PRIMARY KEY,
+    nombre_apellido VARCHAR (45),
+    dni INT,
+    localidad VARCHAR(45)
+);
+
+CREATE TABLE obra_social (
+	id_obra_social INT PRIMARY KEY,
+    localidad VARCHAR (45)
+
+);
+
+CREATE TABLE tipo_cliente (
+	id_tipo_cliente INT PRIMARY KEY,
+    nombre VARCHAR (45),
+    localidad VARCHAR (45)
+    
+);
+
+
+CREATE TABLE localidad (
+	id_localidad INT PRIMARY KEY AUTO_INCREMENT,
+    localidad VARCHAR (45)
+
+);
+
+ALTER TABLE pedidos
+	ADD CONSTRAINT fk_pedidos_cliente FOREIGN KEY (id_cliente) REFERENCES clientes (id_cliente);
+
+ALTER TABLE clientes
+ADD COLUMN id_tipo_cliente INT ;
+
+ALTER TABLE clientes
+	ADD CONSTRAINT fk_clientes_tipocliente FOREIGN KEY (id_tipo_cliente) REFERENCES tipo_cliente (id_tipo_cliente);
+    
+ALTER TABLE pedidos
+	ADD CONSTRAINT fk_pedidos_transporte FOREIGN KEY (id_transporte) REFERENCES transporte (id_transporte);
+    
+ALTER TABLE afiliados 
+	ADD COLUMN id_obra_social INT;
+
+ALTER TABLE afiliados
+	ADD CONSTRAINT fk_afiliados_obrasocial FOREIGN KEY (id_obra_social) REFERENCES obra_social (id_obra_social);
+
+ALTER TABLE obra_social
+	ADD COLUMN id_tipo_cliente INT;
+
+
+ALTER TABLE obra_social
+	ADD CONSTRAINT fk_obrasocial_tipocliente FOREIGN KEY (id_obra_social) REFERENCES tipo_cliente (id_tipo_cliente);
+    
+ALTER TABLE afiliados
+	ADD CONSTRAINT fk_afiliados_localidad FOREIGN KEY (localidad) REFERENCES localidad (id_localidad);
+    
+ALTER TABLE transporte
+	ADD CONSTRAINT fk_transporte_localidad FOREIGN KEY (localidad) REFERENCES localidad (id_localidad);
+    
+    
+    
+ALTER TABLE pedidos
+	ADD CONSTRAINT fk_pedidos_inventario FOREIGN KEY (producto) REFERENCES inventario (id_producto);
+    
+    
+    
+ALTER TABLE pedidos
+	ADD COLUMN id_obra_social INT;
+    
+ALTER TABLE pedidos
+	ADD CONSTRAINT fk_pedidos_obrasocial FOREIGN KEY (id_obra_social) REFERENCES obra_social (id_obra_social);
